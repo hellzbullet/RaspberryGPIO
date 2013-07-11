@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Web.Util;
 
 namespace SolarSystemWeb
 {
@@ -19,6 +20,7 @@ namespace SolarSystemWeb
 
         protected void Application_Start()
         {
+            HttpEncoder.Current = HttpEncoder.Default;
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);
