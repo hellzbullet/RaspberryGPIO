@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Util;
 using NHibernate;
 using RaspberryGPIO.GPIO;
 using SolarSystem.Log;
@@ -25,6 +26,7 @@ namespace SolarSystemWeb.Controllers
 
         public ActionResult Index()
         {
+            HttpEncoder.Current = HttpEncoder.Default;
             var list = _session.CreateCriteria<Device>().List<Device>().ToList();
             return View(list);
         }
