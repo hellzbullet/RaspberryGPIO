@@ -1,0 +1,69 @@
+﻿@model SolarSystemDatabase.Models.Device
+
+@{
+    long time;
+    if (Model.IsRunning) {
+        time = Model.RunTime + (long)(DateTime.Now.Ticks - Model.StartTime);
+    } else {
+        time = Model.RunTime;
+    }
+
+    var totalRunTime = new TimeSpan(time);
+
+    var powerUsed = ((time / (float)TimeSpan.TicksPerHour) * Model.DevicePower) / 1000;
+}
+<div>
+    <table>
+        <tr>
+            <td><b>Name:</b></td>
+            <td>@Model.Name</td>
+        </tr>
+        <tr>
+            @if (Model.IsRunning) {
+                <td><div style="background-color: green; width: 100px; height: 30px; text-align: center">ON</div></td>
+                <td>@Html.ActionLink("Stop", "Stop", new { Id = Model.Id })</td>
+            } else {
+                <td><div style="background-color: red; width: 100px; height: 30px; text-align: center">OFF</div></td>
+                <td>@Html.ActionLink("Start", "Start", new { Id = Model.Id })</td>
+
+            }
+        </tr>
+        <tr>
+            <td><b>Device power:</b></td>
+            <td>@Model.DevicePower</td>
+        </tr>
+        <tr>
+            <td><b>Priority:</b></td>
+            <td>@Model.Priority</td>
+        </tr>
+        <tr>
+            <td><b>Pin:</b></td>
+            <td>@Model.Pin</td>
+        </tr>
+        <tr>
+            <td><b>Status:</b></td>
+            <td>
+                @if (Model.IsUserControlled) {
+                    <div style="border: 2px">Manual</div>
+                } else {
+                    <div style="border: 2px">Automatic</div>
+                }
+            </td>
+            <td>
+                @if (Model.IsUserControlled) {
+                    @Html.ActionLink("Set automatic", "Automatic", new { Id = Model.Id })
+                } else {
+                    @Html.ActionLink("Set manual", "Manual", new { Id = Model.Id })
+                }
+            </td>
+        </tr>
+        <tr>
+            <td><b>Run time:</b></td>
+            <td>@totalRunTime</td>
+        </tr>
+        <tr>
+            <td><b>Power used:</b></td>
+            <td>@powerUsed.ToString("0.00") kWh</td>
+        </tr>
+    </table>
+</div>

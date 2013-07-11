@@ -1,0 +1,62 @@
+﻿@model List<SolarSystemDatabase.Models.Device>
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#tabs").tabs();
+
+            drawCanvas();
+            setInterval(drawCanvas, 10000);
+        });
+        
+        function drawCanvas() {
+            $.getJSON("/Home/PowerData", null, function(data) {
+                if (data == null) return;
+
+                var canvas = document.getElementById("myCanvas");
+                var context = canvas.getContext("2d");
+                $(canvas).width($(canvas).parent().width());
+                $(canvas).height($(canvas).parent().height());
+                context.fillStyle = "cadetblue";
+                context.fillRect(0, 0, $(canvas).width(), $(canvas).height());
+            });
+        }
+    </script>
+}
+
+@if (ViewData["error"] != null) {
+    <div>@ViewData["error"]</div>
+}
+
+
+<div id="tabs">
+    <ul>
+        <li><a href="#tabs-1">Devices</a></li>
+        <li><a href="#tabs-2">Power graphs</a></li>
+    </ul>
+
+    <div id="tabs-1">
+        @Html.ActionLink("New device", "AddDevice")
+        @Html.ActionLink("Logs", "Logs")
+        
+        @if (Model.Any()) {
+            <table>
+                @foreach (var device in Model) {
+                    <tr>
+                        <td>@Html.Partial("_deviceViewPartial", device)</td>
+                    </tr>
+                }
+            </table>
+        }
+    </div>
+
+    <div id="tabs-2">
+        <canvas id="graph"></canvas>
+    </div>
+</div>
+
+
+
+
+
+
